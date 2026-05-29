@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Admin = require("../models/Admin");
 const Blog = require("../models/Blog");
-
+const Service = require("../models/Service");
 const Testimonial = require("../models/Testimonial");
 
 const { isAuthenticated } = require("../middleware/auth");
@@ -26,20 +26,17 @@ router.get("/logout", (req, res) => {
 
 router.get("/admin-dashboard", isAuthenticated, async (req, res) => {
   try {
-    const [blogs, testimonials] =
-      await Promise.all([
-
-        Blog.find().sort({ createdAt: -1 }),
-        Testimonial.find().sort({ createdAt: -1 }),
-  
-      ]);
+    const [blogs, testimonials, services] = await Promise.all([
+      Blog.find().sort({ createdAt: -1 }),
+      Testimonial.find().sort({ createdAt: -1 }),
+      Service.find().sort({ sortOrder: 1, createdAt: -1 })
+    ]);
 
     res.render("admin-dashboard", {
       title: "Admin Dashboard",
-    
       blogs,
       testimonials,
-    
+      services
     });
   } catch (error) {
     console.error(error);
@@ -48,7 +45,7 @@ router.get("/admin-dashboard", isAuthenticated, async (req, res) => {
      
       blogs: [],
       testimonials: [],
-  
+      services: [],
       error: "Failed to load dashboard data",
     });
   }
@@ -91,6 +88,41 @@ router.get("/admin-blogs", isAuthenticated, async (req, res) => {
   }
 });
 
+
+router.get("/admin-services", isAuthenticated, async (req, res) => {
+  try {
+    const searchTerm = req.query.search || "";
+    let query = {};
+
+    if (searchTerm) {
+      query = {
+        $or: [
+          { title: { $regex: searchTerm, $options: "i" } },
+          { metaTitle: { $regex: searchTerm, $options: "i" } },
+          { shortDescription: { $regex: searchTerm, $options: "i" } },
+          { sectionContent: { $regex: searchTerm, $options: "i" } }
+        ]
+      };
+    }
+
+    const services = await Service.find(query).sort({ sortOrder: 1, createdAt: -1 });
+
+    res.render("admin-services", {
+      title: "Service Management",
+      services,
+      searchTerm,
+      error: null
+    });
+  } catch (error) {
+    console.error("Admin Service Load Error:", error);
+    res.status(500).render("admin-services", {
+      title: "Service Management",
+      services: [],
+      searchTerm: "",
+      error: "Failed to load services"
+    });
+  }
+});
 
 router.get("/admin-testimonials", isAuthenticated, async (req, res) => {
   try {

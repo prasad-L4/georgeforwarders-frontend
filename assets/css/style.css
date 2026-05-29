@@ -18647,3 +18647,79 @@ Section Title
   max-height: 500px;
   object-fit: cover;
 }
+
+/*** George Forwarders — centered header nav ***/
+@media (min-width: 992px) {
+  .header-home2-renewable-classic .header-lower .main-box {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    justify-content: unset;
+    gap: 24px;
+  }
+
+  .header-home2-renewable-classic .header-lower .main-box .nav-outer {
+    display: contents;
+    gap: 0;
+  }
+
+  .header-home2-renewable-classic .header-lower .main-box .logo-box {
+    grid-column: 1;
+    justify-self: start;
+  }
+
+  .header-home2-renewable-classic .header-lower .main-box .main-menu,
+  .header-home2-renewable-classic .header-lower .main-box .nav.main-menu {
+    grid-column: 2;
+    justify-self: center;
+    width: 100%;
+  }
+
+  .header-home2-renewable-classic .header-lower .main-box .main-menu .navigation,
+  .header-home2-renewable-classic .header-lower .main-box .nav.main-menu .navigation {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .header-home2-renewable-classic .header-lower .main-box .outer-box {
+    grid-column: 3;
+    justify-self: end;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+}
+
+.sticky-header .inner-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding-left: 120px;
+  padding-right: 120px;
+}
+
+.sticky-header .logo {
+  position: absolute;
+  left: 40px;
+}
+
+.sticky-header .nav-outer {
+  display: flex;
+  justify-content: center;
+  flex: 1;
+  width: 100%;
+}
+
+.sticky-header .main-menu .navigation {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.sticky-header .mobile-nav-toggler {
+  position: absolute;
+  right: 40px;
+}

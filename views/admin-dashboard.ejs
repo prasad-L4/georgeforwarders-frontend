@@ -252,6 +252,12 @@
                                         </a>
                                     </li>
                                     <li class="menu-item ">
+                                        <a href="/admin/admin-services" class="menu-item-button">
+                                            <div class="icon"><i class="fa fa-briefcase"></i></div>
+                                            <div class="text">Service Management</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item ">
                                         <a href="/admin/admin-testimonials" class="menu-item-button">
                                             <div class="icon"><i class="fa fa-users"></i></div>
                                             <div class="text">Testimonials Management</div>
@@ -367,6 +373,19 @@
                                                 <path d="M21 11.5C21 16.1944 17.1944 20 12.5 20C11.3925 20 10.3392 19.7662 9.39062 19.3418L3 21L4.6582 14.6094C4.2338 13.6608 4 12.6075 4 11.5C4 6.80558 7.80558 3 12.5 3C17.1944 3 21 6.80558 21 11.5Z" stroke="white" stroke-width="2" fill="none"/>
                                             </svg>
                                         </div>
+                                        <div class="stat-value"><%= services ? services.length : 0 %></div>
+                                        <div class="stat-label">Total Services</div>
+                                        <div style="margin-top: 12px; font-size: 13px; color: #48bb78;">
+                                            <%= services ? services.filter(s => s.isPublished).length : 0 %> published
+                                        </div>
+                                    </div>
+
+                                    <div class="stat-card">
+                                        <div class="stat-icon testimonial">
+                                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M21 11.5C21 16.1944 17.1944 20 12.5 20C11.3925 20 10.3392 19.7662 9.39062 19.3418L3 21L4.6582 14.6094C4.2338 13.6608 4 12.6075 4 11.5C4 6.80558 7.80558 3 12.5 3C17.1944 3 21 6.80558 21 11.5Z" stroke="white" stroke-width="2" fill="none"/>
+                                            </svg>
+                                        </div>
                                         <div class="stat-value"><%= testimonials ? testimonials.length : 0 %></div>
                                         <div class="stat-label">Total Testimonials</div>
                                         <div style="margin-top: 12px; font-size: 13px; color: #fbbf24;">
@@ -389,6 +408,12 @@
 
                                 <!-- Quick Actions -->
                                 <div style="margin-top: 30px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+                                    <a href="/admin/admin-services" class="quick-action">
+                                        <div class="quick-action-icon" style="background: linear-gradient(135deg, #38b2ac 0%, #319795 100%);">
+                                            <i class="fa fa-briefcase" style="color: white;"></i>
+                                        </div>
+                                        <div class="quick-action-text">Manage Services (CMS)</div>
+                                    </a>
                                     <a href="/admin/admin-blogs" class="quick-action">
                                         <div class="quick-action-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
                                             <i class="fa fa-plus" style="color: white;"></i>

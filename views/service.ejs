@@ -46,12 +46,7 @@
 
 							<li class="dropdown">
   <a href="/service">Services</a>
-  <ul>
-    <li><a href="/clearing">Clearing & Forwarding</a></li>
-    <li><a href="/transportation">Transportation</a></li>
-    <li><a href="/warehouse">Warehousing</a></li>
-    <li><a href="/cargo">Cargo Consolidation</a></li>
-  </ul>
+  <ul><%- include('partials/services-nav-dropdown') %></ul>
 </li>
 								<li class=""><a href="/blog">Blog</a>
 								
@@ -64,8 +59,7 @@
 						<div class="outer-box">
 					
 							<div class="menu-btn">
-								<a href="tel:+919447711565" class="theme-btn btn-style-one"><span class="btn-title">Get a
-										Quote <i class="fa-solid fa-arrow-right"></i></span></a>
+								<a href="/contact" class="theme-btn btn-style-one"><span class="btn-title">Connect Now <i class="fa-solid fa-arrow-right"></i></span></a>
 							</div>
 							<button class="menubars" type="button" data-bs-toggle="offcanvas" data-bs-target="#menubar">
 								<span></span>
@@ -248,111 +242,38 @@
 <section class="service-section-home2-classic">
 
   <div class="row g-4">
-
-    <!-- SERVICE 1 -->
+    <% if (services && services.length) { %>
+      <% services.forEach(function(item) { %>
+        <% const cardImg = resolveImage(item.cardImageUrl || item.heroImageUrl); %>
+        <% const iconImg = item.iconImageUrl ? resolveImage(item.iconImageUrl) : ''; %>
+        <% const isAlt = item.cardStyle === 'two'; %>
     <div class="col-lg-6 col-md-6 col-sm-12">
       <div class="single-service-box h-100">
         <div class="service-thumb">
           <figure class="reveal">
-            <img src="images/home2-classic/service-thumb1.png" alt="service-thumb">
+            <img src="<%= cardImg %>" alt="<%= item.title %>">
           </figure>
-          <div class="service-icon">
-            <img src="images/home2/service-icon1.png" alt="icon">
+          <% if (iconImg) { %>
+          <div class="service-icon<%= isAlt ? ' two' : '' %>">
+            <img src="<%= iconImg %>" alt="<%= item.title %> icon">
           </div>
+          <% } %>
         </div>
         <div class="service-content">
-          <h2 class="service-title">
-            <a href="/clearing">Clearing & Forwarding</a>
+          <h2 class="service-title<%= isAlt ? ' two' : '' %>">
+            <a href="/service/<%= item.slug %>"><%= item.title %></a>
           </h2>
-          <p>
-            Our experienced team ensures smooth customs clearance and efficient 
-            shipment handling at major ports. We maintain strong connections with 
-            shipping lines and NVOCC operators for seamless logistics operations.
-          </p>
-          <a class="service-btn" href="/clearing">
+          <p><%= item.shortDescription %></p>
+          <a class="service-btn<%= isAlt ? ' two' : '' %>" href="/service/<%= item.slug %>">
             Explore More <i class="fa-solid fa-arrow-right-long"></i>
           </a>
         </div>
       </div>
     </div>
-
-    <!-- SERVICE 2 -->
-    <div class="col-lg-6 col-md-6 col-sm-12">
-      <div class="single-service-box h-100">
-        <div class="service-thumb">
-          <figure class="reveal">
-            <img src="images/home2-classic/service-thumb2.png" alt="service-thumb">
-          </figure>
-          <div class="service-icon two">
-            <img src="images/home2/service-icon2.png" alt="icon">
-          </div>
-        </div>
-        <div class="service-content">
-          <h2 class="service-title two">
-            <a href="/transportation">Transportation</a>
-          </h2>
-          <p>
-            We provide reliable transportation using our fleet of 20ft and 40ft trucks, 
-            ensuring safe and timely delivery from the exporter’s location to the port.
-          </p>
-          <a class="service-btn two" href="/transportation">
-            Explore More <i class="fa-solid fa-arrow-right-long"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <!-- SERVICE 3 -->
-    <div class="col-lg-6 col-md-6 col-sm-12">
-      <div class="single-service-box h-100">
-        <div class="service-thumb">
-          <figure class="reveal">
-            <img src="images/home2-classic/service-thumb3.png" alt="service-thumb">
-          </figure>
-          <div class="service-icon">
-            <img src="images/home2/service-icon3.png" alt="icon">
-          </div>
-        </div>
-        <div class="service-content">
-          <h2 class="service-title">
-            <a href="/warehouse">Warehousing</a>
-          </h2>
-          <p>
-            Our secure warehousing facilities ensure safe storage and handling of goods. 
-            We provide flexible solutions for exporters facing stuffing or storage challenges.
-          </p>
-          <a class="service-btn" href="/warehouse">
-            Explore More <i class="fa-solid fa-arrow-right-long"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <!-- SERVICE 4 -->
-    <div class="col-lg-6 col-md-6 col-sm-12">
-      <div class="single-service-box h-100">
-        <div class="service-thumb">
-          <figure class="reveal">
-            <img src="images/home2-classic/service-thumb4.png" alt="service-thumb">
-          </figure>
-          <div class="service-icon two">
-            <img src="images/home2/service-icon4.png" alt="icon">
-          </div>
-        </div>
-        <div class="service-content">
-          <h2 class="service-title two">
-            <a href="/cargo">Cargo Consolidation</a>
-          </h2>
-          <p>
-            We offer efficient LCL cargo consolidation services at competitive rates, 
-            enabling exporters to ship smaller loads with ease and cost efficiency.
-          </p>
-          <a class="service-btn two" href="/cargo">
-            Explore More <i class="fa-solid fa-arrow-right-long"></i>
-          </a>
-        </div>
-      </div>
-    </div>
+      <% }); %>
+    <% } else { %>
+    <div class="col-12"><p class="text-center">No services available yet.</p></div>
+    <% } %>
 
 
 
@@ -440,37 +361,7 @@
 				<div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
 <div class="footer-widget-content">
   <h2 class="footer-title">Our Services</h2>
-  <ul class="footer-menu">
-
-    <li>
-      <a href="/clearing">
-        Clearing & Forwarding
-        <i class="fa-solid fa-arrow-right-long"></i>
-      </a>
-    </li>
-
-    <li>
-      <a href="/transportation">
-        Transportation
-        <i class="fa-solid fa-arrow-right-long"></i>
-      </a>
-    </li>
-
-    <li>
-      <a href="/warehouse">
-        Warehousing
-        <i class="fa-solid fa-arrow-right-long"></i>
-      </a>
-    </li>
-
-    <li>
-      <a href="/cargo">
-        Cargo Consolidation
-        <i class="fa-solid fa-arrow-right-long"></i>
-      </a>
-    </li>
-
-  </ul>
+  <ul class="footer-menu"><%- include('partials/services-footer-links') %></ul>
 </div>
 </div>
 
