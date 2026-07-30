@@ -1,0 +1,81 @@
+<style>
+.service-rich-content {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #4a5568;
+  word-wrap: break-word;
+}
+.service-rich-content h1 {
+  text-align: center;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 700;
+  color: #1a202c;
+  margin: 0 0 1rem;
+}
+.service-rich-content h2,
+.service-rich-content h3,
+.service-rich-content h4 {
+  font-style: italic;
+  font-weight: 600;
+  color: #2d3748;
+  margin: 1.75rem 0 0.75rem;
+}
+.service-rich-content h2 { font-size: 1.35rem; }
+.service-rich-content h3 { font-size: 1.2rem; }
+.service-rich-content p {
+  margin-bottom: 1rem;
+  text-align: justify;
+}
+.service-rich-content blockquote,
+.service-rich-content .service-intro-quote {
+  text-align: center;
+  font-style: italic;
+  color: #718096;
+  margin: 0.5rem auto 1.5rem;
+  max-width: 92%;
+  border: none;
+  padding: 0;
+}
+.service-rich-content blockquote p {
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+.service-rich-content strong,
+.service-rich-content b {
+  font-weight: 700;
+  color: #2d3748;
+}
+.service-rich-content ul,
+.service-rich-content ol {
+  margin: 0 0 1rem 1.25rem;
+  padding-left: 1rem;
+}
+.service-rich-content a {
+  color: var(--theme-color, #0d6efd);
+  text-decoration: underline;
+}
+.service-rich-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+.service-rich-content .service-two-columns,
+.service-rich-content .two-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem 2.5rem;
+  margin: 1.5rem 0 2rem;
+  align-items: start;
+}
+.service-rich-content .service-column {
+  min-width: 0;
+}
+@media (max-width: 991px) {
+  .service-rich-content .service-two-columns,
+  .service-rich-content .two-columns {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+</style>

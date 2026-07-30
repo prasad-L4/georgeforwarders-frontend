@@ -1,0 +1,10 @@
+<% if (servicesNav && servicesNav.length) { %>
+  <% servicesNav.forEach(function(navService) { %>
+    <li>
+      <a href="/service/<%= navService.slug %>">
+        <%= navService.title %>
+        <i class="fa-solid fa-arrow-right-long"></i>
+      </a>
+    </li>
+  <% }); %>
+<% } %>

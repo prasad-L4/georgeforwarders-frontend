@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title><%= service.metaTitle || service.title %> | GEORGE FORWARDERS</title>
+<meta name="description" content="<%= service.metaDescription %>">
+<% if (service.metaKeywords && service.metaKeywords.length) { %>
+<meta name="keywords" content="<%= service.metaKeywords.join(', ') %>">
+<% } %>
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/style.css" rel="stylesheet">
+<link href="/css/responsive.css" rel="stylesheet">
+<link rel="shortcut icon" href="/images/george/logo.png" type="image/x-icon">
+<link rel="icon" href="/images/george/logo.png" type="image/x-icon">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<%- include('partials/service-content-styles') %>
+</head>
+<body>
+
+
+<header class="main-header header-home2-renewable-classic">
+<div class="header-lower">
+<div class="main-box">
+<div class="logo-box"><div class="logo"><a href="/"><img src="/images/george/logo-white.png" alt="logo"></a></div></div>
+<div class="nav-outer">
+<nav class="nav main-menu">
+<ul class="navigation">
+<li><a href="/">Home</a></li>
+<li><a href="/about">About Us</a></li>
+<li class="dropdown">
+<a href="/service">Services</a>
+<ul><%- include('partials/services-nav-dropdown') %></ul>
+</li>
+<li><a href="/blog">Blog</a></li>
+<li><a href="/contact">Contact</a></li>
+</ul>
+</nav>
+<div class="outer-box">
+<div class="menu-btn"><a href="/contact" class="theme-btn btn-style-one"><span class="btn-title">Connect Now <i class="fa-solid fa-arrow-right"></i></span></a></div>
+<button class="menubars" type="button" data-bs-toggle="offcanvas" data-bs-target="#menubar"><span></span><span></span><span></span></button>
+<div class="mobile-nav-toggler"><span class="icon lnr-icon-bars"></span></div>
+</div>
+</div>
+</div>
+</div>
+</header>
+
+<div class="breadcumb-area">
+<div class="container">
+<div class="row align-items-center">
+<div class="col-lg-12 text-center">
+<div class="breadcumb-content">
+<div class="breadcumb-title"><h4><%= service.title %></h4></div>
+<ul>
+<li><a href="/">Home</a></li>
+<li><a href="/service">Services</a></li>
+<li><%= service.title %></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="warehouse-services-area py-5 position-relative bg-light">
+<div class="container pb-5">
+<div class="row mb-5 position-relative warehouse-hero-wrapper">
+<div class="col-lg-10 mx-auto">
+<div class="warehouse-img-box position-relative rounded-4 shadow-lg overflow-hidden">
+<img src="<%= resolveImage(service.heroImageUrl) %>" alt="<%= service.title %>" class="img-fluid w-100 object-fit-cover" style="height: 500px;">
+<div class="warehouse-img-overlay absolute-bg"></div>
+</div>
+</div>
+<div class="col-lg-8 col-sm-10 position-absolute bottom-0 start-50 translate-middle-x warehouse-glass-card-wrapper" style="margin-bottom: -80px; z-index: 10;">
+<div class="warehouse-glass-card p-4 p-md-5 rounded-4 shadow-lg text-center">
+<h2 class="display-6 fw-bolder text-dark mb-3"><%= service.heroTitle %></h2>
+<p class="lead text-muted mb-0 mx-auto" style="max-width: 700px; font-size: 16px;"><%= service.heroDescription %></p>
+</div>
+</div>
+</div>
+
+<div class="pt-5 mt-5 d-none d-lg-block"></div>
+
+<div class="row gx-5 mt-4">
+<div class="col-12">
+<div class="warehouse-split-content mt-4 mt-lg-0">
+<% if (service.sectionTitle) { %>
+<h3 class="fw-bold mb-4"><%= service.sectionTitle %></h3>
+<% } %>
+<div class="service-rich-content mb-4"><%- formatServiceHtml(service.sectionContent) %></div>
+
+<% if (service.calloutText) { %>
+<div class="warehouse-callout d-flex align-items-center p-4 rounded-3 shadow-sm mb-5 bg-white border-start border-4 border-primary">
+<div class="me-4 flex-shrink-0">
+<div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+<i class="fa-solid fa-shield-halved fs-3"></i>
+</div>
+</div>
+<p class="m-0 fw-medium text-dark fst-italic"><%= service.calloutText %></p>
+</div>
+<% } %>
+
+<% if (service.features && service.features.length) { %>
+<div class="d-flex flex-column gap-3 mb-5">
+<% service.features.forEach(function(feature) { %>
+<div class="warehouse-feature-row d-flex align-items-center bg-white p-3 rounded-3 shadow-sm border border-light">
+<div class="wh-icon-box bg-light text-primary rounded d-flex align-items-center justify-content-center flex-shrink-0" style="width: 50px; height: 50px;">
+<i class="<%= feature.icon || 'fa-solid fa-check' %> fs-4"></i>
+</div>
+<div class="ms-3">
+<h4 class="h5 fw-bold mb-1 m-0"><%= feature.title %></h4>
+<p class="text-muted small m-0"><%= feature.description %></p>
+</div>
+</div>
+<% }); %>
+</div>
+<% } %>
+
+<% if (service.additionalContent) { %>
+<div class="service-rich-content mb-4"><%- formatServiceHtml(service.additionalContent) %></div>
+<% } %>
+</div>
+</div>
+
+<div class="col-lg-5 ms-lg-auto">
+<% if (service.benefits && service.benefits.length) { %>
+<div class="warehouse-benefits-widget bg-white p-4 rounded-4 shadow-sm mb-4 border border-light">
+<h4 class="fw-bold mb-4 d-flex align-items-center gap-2"><i class="fa-solid fa-star text-warning"></i> Key Advantages</h4>
+<ul class="list-unstyled d-flex flex-column gap-3 m-0">
+<% service.benefits.forEach(function(benefit) { %>
+<li class="d-flex align-items-center gap-3">
+<div class="wh-check text-white bg-success rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 25px; height: 25px; font-size: 12px;"><i class="fa-solid fa-check"></i></div>
+<span class="fw-medium text-dark"><%= benefit %></span>
+</li>
+<% }); %>
+</ul>
+</div>
+<% } %>
+
+<div class="warehouse-contact-widget p-4 rounded-4 shadow text-white text-center position-relative overflow-hidden">
+<div class="position-relative z-1">
+<div class="mb-3 d-inline-flex align-items-center justify-content-center bg-white text-primary rounded-circle shadow-sm" style="width: 50px; height: 50px;"><i class="fa-solid fa-headset fs-4"></i></div>
+<p class="text-uppercase tracking-wider fw-bold text-white-50 mb-1" style="letter-spacing: 2px; font-size: 12px;">Get in Touch</p>
+<h3 class="text-white fw-bolder mb-2 display-6">94477 11565</h3>
+<p class="mb-4 small text-white"><i class="fa-regular fa-envelope me-1"></i> sales@georgeforwarders.com</p>
+<a href="/contact" class="btn bg-white w-100 py-3 rounded-pill fw-bold shadow-sm text-primary d-flex align-items-center justify-content-center gap-2">Contact Support <i class="fa-solid fa-arrow-right-long"></i></a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<footer class="main-footer-home2">
+<div class="auto-container">
+<div class="main-footer-section">
+<div class="auto-container">
+<div class="row">
+<div class="col-xl-3 col-lg-12 col-md-6">
+<div class="footer-widget-content social">
+<div class="logo"><a href="/"><img src="/images/george/logo-white.png" alt="logo"></a></div>
+<div class="footer-desc">At George Forwarder, we connect businesses worldwide with dependable logistics solutions.</div>
+</div>
+</div>
+<div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+<div class="footer-widget-content">
+<h2 class="footer-title">Company</h2>
+<ul class="footer-menu">
+<li><a href="/">Home<i class="fa-solid fa-arrow-right-long"></i></a></li>
+<li><a href="/about">About Us<i class="fa-solid fa-arrow-right-long"></i></a></li>
+<li><a href="/service">Services<i class="fa-solid fa-arrow-right-long"></i></a></li>
+<li><a href="/contact">Contact Us<i class="fa-solid fa-arrow-right-long"></i></a></li>
+</ul>
+</div>
+</div>
+<div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+<div class="footer-widget-content">
+<h2 class="footer-title">Our Services</h2>
+<ul class="footer-menu"><%- include('partials/services-footer-links') %></ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="footer-bottom"><div class="auto-container"><div class="copyright-text">&copy; George Forwarder 2026. All rights reserved.</div></div></div>
+</div>
+</footer>
+
+</div>
+<script src="/js/jquery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/script.js"></script>
+</body>
+</html>

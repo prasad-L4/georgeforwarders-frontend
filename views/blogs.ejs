@@ -46,12 +46,7 @@
 
 							<li class="dropdown">
   <a href="/service">Services</a>
-  <ul>
-    <li><a href="/clearing">Clearing & Forwarding</a></li>
-    <li><a href="/transportation">Transportation</a></li>
-    <li><a href="/warehouse">Warehousing</a></li>
-    <li><a href="/cargo">Cargo Consolidation</a></li>
-  </ul>
+  <ul><%- include('partials/services-nav-dropdown') %></ul>
 </li>
 								<li class=""><a href="/blog">Blog</a>
 								
@@ -64,8 +59,7 @@
 						<div class="outer-box">
 					
 							<div class="menu-btn">
-								<a href="tel:+919447711565" class="theme-btn btn-style-one"><span class="btn-title">Get a
-										Quote <i class="fa-solid fa-arrow-right"></i></span></a>
+								<a href="/contact" class="theme-btn btn-style-one"><span class="btn-title">Connect Now <i class="fa-solid fa-arrow-right"></i></span></a>
 							</div>
 							<button class="menubars" type="button" data-bs-toggle="offcanvas" data-bs-target="#menubar">
 								<span></span>
@@ -152,6 +146,17 @@
 									</ul>
 								</div>
 							</nav><!-- Main Menu End-->
+
+							<div class="outer-box">
+								<div class="menu-btn">
+									<a href="/contact" class="theme-btn btn-style-one"><span class="btn-title">Connect Now <i class="fa-solid fa-arrow-right"></i></span></a>
+								</div>
+								<button class="menubars" type="button" data-bs-toggle="offcanvas" data-bs-target="#menubar">
+									<span></span>
+									<span></span>
+									<span></span>
+								</button>
+							</div>
 
 							<!--Mobile Navigation Toggler-->
 							<div class="mobile-nav-toggler"><span class="icon lnr-icon-bars"></span></div>

@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<head>
+    <meta charset="utf-8">
+    <title>Georgeforwarders - Service Management</title>
+    <meta name="author" content="themesflat.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" type="text/css" href="/admin-css/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/admin-css/animation.css">
+    <link rel="stylesheet" type="text/css" href="/admin-css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/admin-css/bootstrap-select.min.css">
+    <link rel="stylesheet" type="text/css" href="/admin-css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/admin-font/fonts.css">
+    <link rel="stylesheet" href="/admin-icon/style.css">
+    <link rel="shortcut icon" href="/images/george/logo.png">
+    <link rel="apple-touch-icon-precomposed" href="/images/george/logo.png">
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-left: 8px;
+        }
+        .status-published { background: #c6f6d5; color: #22543d; }
+        .status-draft { background: #fed7d7; color: #742a2a; }
+        .st-data-card .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 1.25rem 1.5rem 0.75rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        }
+        .st-data-card .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1a202c;
+        }
+        .st-data-card .card-body {
+            padding: 1rem 1.5rem;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .st-data-card .card-body p { margin-bottom: 0.5rem; }
+        .st-data-card .card-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.06);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+        }
+        .no-results {
+            text-align: center;
+            padding: 2rem;
+            color: #718096;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            width: 95%;
+            max-width: 900px;
+            max-height: 92vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            position: relative;
+        }
+        .modal-header {
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 15px;
+        }
+        .modal-body { padding: 15px 0; }
+        .modal-footer {
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            margin-top: 15px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #aaa;
+            cursor: pointer;
+        }
+        .close:hover { color: #333; }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 500; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .form-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; }
+        .help-text { font-size: 12px; color: #666; margin-top: 4px; }
+        @media (max-width: 768px) { .form-row { grid-template-columns: 1fr; } }
+        .note-editor { border-radius: 4px; }
+        .note-toolbar { background: #f8f9fa; }
+        .editor-label-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+        .btn-insert-cols { font-size: 12px; padding: 4px 10px; border: 1px solid #ccc; background: #fff; border-radius: 4px; cursor: pointer; }
+        .btn-insert-cols:hover { background: #edf2f7; }
+        .repeatable-section { border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px; background: #f8fafc; margin-bottom: 14px; }
+        .repeatable-section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .repeatable-section-header h6 { margin: 0; font-size: 15px; font-weight: 600; }
+        .repeatable-item { background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; margin-bottom: 10px; position: relative; }
+        .repeatable-item:last-child { margin-bottom: 0; }
+        .btn-remove-row { position: absolute; top: 8px; right: 8px; background: #fee2e2; color: #b91c1c; border: none; border-radius: 4px; padding: 4px 10px; font-size: 12px; cursor: pointer; }
+        .btn-remove-row:hover { background: #fecaca; }
+        .btn-add-row { background: #e0f2fe; color: #0369a1; border: 1px solid #7dd3fc; border-radius: 4px; padding: 6px 14px; font-size: 13px; cursor: pointer; }
+        .btn-add-row:hover { background: #bae6fd; }
+        .feature-icon-preview { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: #edf2f7; border-radius: 6px; margin-top: 6px; color: #2563eb; font-size: 18px; }
+        .benefit-item { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+        .benefit-item input { flex: 1; margin: 0; }
+        .benefit-item .btn-remove-row { position: static; flex-shrink: 0; }
+    </style>
+</head>
+<body class="body">
+    <div id="wrapper">
+        <div id="page" class="">
+            <div class="layout-wrap loader-off">
+                <div id="preload" class="preload-container">
+                    <div class="preloading"><span></span></div>
+                </div>
+                <div class="section-menu-left">
+                    <div class="box-logo">
+                        <a href="/admin/admin-dashboard" id="site-logo-inner">
+                            <img style="width:60px;" id="logo_header" alt="" src="/images/george/logo.png" data-light="/images/george/logo.png" data-dark="img/logo.png">
+                        </a>
+                        <div class="button-show-hide"><i class="icon-chevron-left"></i></div>
+                    </div>
+                    <div class="section-menu-left-wrap">
+                        <div class="center">
+                            <div class="center-item">
+                                <ul>
+                                    <li class="menu-item">
+                                        <a href="/admin/admin-dashboard">
+                                            <div class="icon">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M12.2652 3.57566C12.1187 3.42921 11.8813 3.42921 11.7348 3.57566L5.25 10.0605V19.8748C5.25 20.0819 5.41789 20.2498 5.625 20.2498H9V16.1248C9 15.0893 9.83947 14.2498 10.875 14.2498H13.125C14.1605 14.2498 15 15.0893 15 16.1248V20.2498H18.375C18.5821 20.2498 18.75 20.0819 18.75 19.8748V10.0605L12.2652 3.57566ZM20.25 11.5605L21.2197 12.5302C21.5126 12.8231 21.9874 12.8231 22.2803 12.5302C22.5732 12.2373 22.5732 11.7624 22.2803 11.4695L13.3258 2.51499C12.5936 1.78276 11.4064 1.78276 10.6742 2.515L1.71967 11.4695C1.42678 11.7624 1.42678 12.2373 1.71967 12.5302C2.01256 12.8231 2.48744 12.8231 2.78033 12.5302L3.75 11.5605V19.8748C3.75 20.9104 4.58947 21.7498 5.625 21.7498H18.375C19.4105 21.7498 20.25 20.9104 20.25 19.8748V11.5605ZM13.5 20.2498H10.5V16.1248C10.5 15.9177 10.6679 15.7498 10.875 15.7498H13.125C13.3321 15.7498 13.5 15.9177 13.5 16.1248V20.2498Z" fill="#111111"/>
+                                                </svg>
+                                            </div>
+                                            <div class="text">Admin Dashboard</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="/admin/admin-blogs" class="menu-item-button">
+                                            <div class="icon"><i class="icon-file-plus"></i></div>
+                                            <div class="text">Blog Management</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item active">
+                                        <a href="/admin/admin-services" class="menu-item-button">
+                                            <div class="icon"><i class="fa fa-briefcase"></i></div>
+                                            <div class="text">Service Management</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="/admin/admin-testimonials" class="menu-item-button">
+                                            <div class="icon"><i class="fa fa-users"></i></div>
+                                            <div class="text">Testimonials Management</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="/admin/logout">
+                                            <div class="icon">
+                                                <svg width="24" height="22" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M8.125 18.6875C8.125 18.903 8.0394 19.1097 7.88702 19.262C7.73465 19.4144 7.52799 19.5 7.3125 19.5H1.625C1.19402 19.5 0.780698 19.3288 0.475951 19.024C0.171205 18.7193 0 18.306 0 17.875V1.625C0 1.19402 0.171205 0.780698 0.475951 0.475951C0.780698 0.171205 1.19402 0 1.625 0H7.3125C7.52799 0 7.73465 0.0856026 7.88702 0.237976C8.0394 0.390349 8.125 0.597012 8.125 0.8125C8.125 1.02799 8.0394 1.23465 7.88702 1.38702C7.73465 1.5394 7.52799 1.625 7.3125 1.625H1.625V17.875H7.3125C7.52799 17.875 7.73465 17.9606 7.88702 18.113C8.0394 18.2653 8.125 18.472 8.125 18.6875ZM19.2623 9.17516L15.1998 5.11266C15.0474 4.9602 14.8406 4.87455 14.625 4.87455C14.4094 4.87455 14.2026 4.9602 14.0502 5.11266C13.8977 5.26511 13.812 5.47189 13.812 5.6875C13.812 5.90311 13.8977 6.10989 14.0502 6.26234L16.7263 8.9375H7.3125C7.09701 8.9375 6.89035 9.0231 6.73798 9.17548C6.5856 9.32785 6.5 9.53451 6.5 9.75C6.5 9.96549 6.5856 10.1722 6.73798 10.3245C6.89035 10.4769 7.09701 10.5625 7.3125 10.5625H16.7263L14.0502 13.2377C13.8977 13.3901 13.812 13.5969 13.812 13.8125C13.812 14.0281 13.8977 14.2349 14.0502 14.3873C14.2026 14.5398 14.4094 14.6255 14.625 14.6255C14.8406 14.6255 15.0474 14.5398 15.1998 14.3873L19.2623 10.3248C19.3379 10.2494 19.3978 10.1598 19.4387 10.0611C19.4796 9.9625 19.5006 9.85678 19.5006 9.75C19.5006 9.64322 19.4796 9.5375 19.4387 9.43886C19.3978 9.34023 19.3379 9.25062 19.2623 9.17516Z" fill="#111111"/>
+                                                </svg>
+                                            </div>
+                                            <div class="text">Log out</div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-content-right">
+                    <div class="header-dashboard">
+                        <div class="wrap">
+                            <div class="header-left">
+                                <a href="/admin/admin-dashboard">
+                                    <img style="width: 50px;" id="logo_header_mobile" alt="" src="/images/george/logo.png" data-light="/images/george/logo.png" data-dark="/images/george/logo.png">
+                                </a>
+                                <div class="button-show-hide"><i class="icon-chevron-left"></i></div>
+                            </div>
+                            <div class="header-grid">
+                                <div class="header-item button-dark-light"><i class="icon-moon"></i></div>
+                                <div class="header-item button-zoom-maximize"><div><i class="icon-maximize"></i></div></div>
+                                <div class="popup-wrap user type-header">
+                                    <div class="dropdown">
+                                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <span class="header-user wg-user">
+                                                <span class="image"><img src="/images/george/logo.png" alt=""></span>
+                                                <span class="flex flex-column">
+                                                    <span class="body-text text-main-dark">Georgeforwarders</span>
+                                                    <span class="text-tiny">Admin</span>
+                                                </span>
+                                            </span>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end has-content" aria-labelledby="dropdownMenuButton3">
+                                            <li><a href="/admin/logout" class="user-item"><div class="icon"><i class="icon-log-out"></i></div><div class="body-title-2">Log out</div></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="main-content">
+                        <div class="main-content-inner">
+                            <div class="main-content-wrap">
+                                <div class="flex items-center flex-wrap justify-between gap20 mb-30">
+                                    <h3>Service Management</h3>
+                                    <ul class="breadcrumbs flex items-center flex-wrap justify-start gap10">
+                                        <li><a href="/admin/admin-dashboard"><div class="text-tiny">Dashboard</div></a></li>
+                                        <li><i class="icon-chevron-right"></i></li>
+                                        <li><div class="text-tiny">Service Management</div></li>
+                                    </ul>
+                                </div>
+
+                                <% if (typeof error !== 'undefined' && error) { %>
+                                <div class="alert alert-danger mb-20"><%= error %></div>
+                                <% } %>
+
+                                <div class="wg-box">
+                                    <div class="title-box">
+                                        <i class="icon-coffee"></i>
+                                        <div class="body-text">Search services by title, description, or page content.</div>
+                                    </div>
+
+                                    <div class="flex items-center justify-between gap10 flex-wrap">
+                                        <div class="wg-filter flex-grow">
+                                            <form class="form-search" action="/admin/admin-services" method="GET">
+                                                <fieldset class="name">
+                                                    <input type="text" placeholder="Search here..." name="search" value="<%= searchTerm %>" aria-required="true">
+                                                </fieldset>
+                                                <div class="button-submit">
+                                                    <button type="submit"><i class="icon-search"></i></button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <button class="tf-button style-1 w208" type="button" onclick="openModal()">
+                                            <i class="icon-plus"></i>Add new
+                                        </button>
+                                    </div>
+
+                                    <div class="st-container">
+                                        <div class="st-data-grid">
+                                            <% if (services && services.length > 0) { %>
+                                                <% services.forEach(function(item) { %>
+                                                <div class="st-data-card" id="service-<%= item._id %>">
+                                                    <div class="card-header">
+                                                        <div class="card-title"><%= item.title %></div>
+                                                        <span class="status-badge <%= item.isPublished ? 'status-published' : 'status-draft' %>">
+                                                            <%= item.isPublished ? 'Published' : 'Draft' %>
+                                                        </span>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <p><strong>URL:</strong> /service/<%= item.slug %></p>
+                                                        <p><strong>Display order:</strong> <%= item.sortOrder %></p>
+                                                        <p><strong>Summary:</strong> <%= item.shortDescription %></p>
+                                                        <% if (item.features && item.features.length) { %>
+                                                        <p><strong>Highlights:</strong> <%= item.features.length %></p>
+                                                        <% } %>
+                                                        <% if (item.benefits && item.benefits.length) { %>
+                                                        <p><strong>Advantages:</strong> <%= item.benefits.length %></p>
+                                                        <% } %>
+                                                        <% if (item.heroImageUrl) { %>
+                                                        <div class="mt-10">
+                                                            <img src="<%= resolveImage(item.heroImageUrl) %>" alt="<%= item.title %>" style="max-width:200px;max-height:150px;object-fit:cover;border-radius:6px;">
+                                                        </div>
+                                                        <% } %>
+                                                    </div>
+                                                    <div class="card-footer">
+                                                        <a class="tf-button style-2" href="/service/<%= item.slug %>" target="_blank">Preview</a>
+                                                        <button class="tf-button style-1" type="button" onclick="editService('<%= item._id %>')">
+                                                            <i class="icon-edit"></i> Edit
+                                                        </button>
+                                                        <button class="tf-button style-3" type="button" onclick="confirmDeleteService('<%= item._id %>')">
+                                                            <i class="icon-trash"></i> Delete
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <% }); %>
+                                            <% } else { %>
+                                                <div class="no-results">
+                                                    <p>No services found<%= searchTerm ? ' for "' + searchTerm + '"' : '' %>. Click <strong>Add new</strong> to create one.</p>
+                                                </div>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bottom-page">
+                            <div class="body-text">Copyright © 2025 <a href="https://trivlogic.com">Trivlogic</a>. Design by Trivlogic All rights reserved</div>
+                        </div>
+                    </div>
+
+<div id="serviceModal" class="modal">
+<div class="modal-content">
+<span class="close" onclick="closeModal()">&times;</span>
+<h4 id="modalTitle">Add New Service</h4>
+<form id="serviceForm" enctype="multipart/form-data">
+<input type="hidden" id="serviceId" name="serviceId">
+
+<div class="form-row">
+    <div class="form-group"><label>Service Title *</label><input type="text" id="title" name="title" required></div>
+    <div class="form-group"><label>URL Slug *</label><input type="text" id="slug" name="slug" placeholder="e.g. warehousing" required></div>
+</div>
+<div class="form-row">
+    <div class="form-group">
+        <label>Old page link name (optional)</label>
+        <input type="text" id="legacySlug" name="legacySlug" placeholder="e.g. warehouse — only if you had an old URL">
+        <div class="help-text">Visitors using old links like /warehouse will be redirected automatically.</div>
+    </div>
+    <div class="form-group">
+        <label>Display order</label>
+        <input type="number" id="sortOrder" name="sortOrder" value="0" min="0">
+        <div class="help-text">Lower numbers appear first on the services page.</div>
+    </div>
+</div>
+
+<div class="form-group"><label>Short Description (listing cards) *</label><textarea id="shortDescription" name="shortDescription" rows="2" required></textarea></div>
+
+<h5>SEO</h5>
+<div class="form-group"><label>Meta Title *</label><input type="text" id="metaTitle" name="metaTitle" required></div>
+<div class="form-group"><label>Meta Description *</label><textarea id="metaDescription" name="metaDescription" rows="2" required></textarea></div>
+<div class="form-group"><label>Meta Keywords (comma separated)</label><input type="text" id="metaKeywords" name="metaKeywords"></div>
+
+<h5>Hero Section</h5>
+<div class="form-group"><label>Hero Title *</label><input type="text" id="heroTitle" name="heroTitle" required></div>
+<div class="form-group"><label>Hero Description *</label><textarea id="heroDescription" name="heroDescription" rows="2" required></textarea></div>
+<div class="form-row">
+    <div class="form-group"><label>Hero Image *</label><input type="file" id="heroImage" name="heroImage" accept="image/*"><div id="heroPreview" class="help-text"></div></div>
+    <div class="form-group"><label>Card Image (listing)</label><input type="file" id="cardImage" name="cardImage" accept="image/*"><div id="cardPreview" class="help-text"></div></div>
+</div>
+<div class="form-group"><label>Icon Image (optional overlay)</label><input type="file" id="iconImage" name="iconImage" accept="image/*"><div id="iconPreview" class="help-text"></div></div>
+
+<h5>Detail Page Content</h5>
+<div class="form-group">
+    <label>Section Title (optional extra heading above editor content)</label>
+    <input type="text" id="sectionTitle" name="sectionTitle" placeholder="Leave empty if title is inside the editor below">
+</div>
+<div class="form-group">
+    <div class="editor-label-row">
+        <label>Main Page Content * <span style="font-weight:normal;color:#666;">— use the editor for headings, bold, quotes, columns</span></label>
+        <button type="button" class="btn-insert-cols" onclick="insertTwoColumns('sectionContent')">+ Two columns</button>
+    </div>
+    <textarea id="sectionContent" name="sectionContent" required></textarea>
+    <div class="help-text">Format text like your layout: Heading 1 for title, blockquote for intro lines, Heading 2 for section titles, or click “Two columns” for a side-by-side layout.</div>
+</div>
+<div class="form-group"><label>Callout Quote (optional sidebar-style highlight)</label><textarea id="calloutText" name="calloutText" rows="2"></textarea></div>
+<div class="form-group">
+    <div class="editor-label-row">
+        <label>Additional Content (optional)</label>
+        <button type="button" class="btn-insert-cols" onclick="insertTwoColumns('additionalContent')">+ Two columns</button>
+    </div>
+    <textarea id="additionalContent" name="additionalContent"></textarea>
+</div>
+
+<div class="repeatable-section">
+    <div class="repeatable-section-header">
+        <h6>Service highlights (feature boxes)</h6>
+        <button type="button" class="btn-add-row" onclick="addFeatureRow()">+ Add highlight</button>
+    </div>
+    <p class="help-text" style="margin-top:0;margin-bottom:12px;">These appear as icon boxes on the service detail page (e.g. “Secure Storage”, “Efficient Handling”).</p>
+    <div id="featuresList"></div>
+</div>
+
+<div class="repeatable-section">
+    <div class="repeatable-section-header">
+        <h6>Key advantages (checklist)</h6>
+        <button type="button" class="btn-add-row" onclick="addBenefitRow()">+ Add advantage</button>
+    </div>
+    <p class="help-text" style="margin-top:0;margin-bottom:12px;">Short bullet points shown in the sidebar (e.g. “Safe & secure storage”).</p>
+    <div id="benefitsList"></div>
+</div>
+
+<div class="form-row">
+    <div class="form-group">
+        <label>Card colour style (services listing)</label>
+        <select id="cardStyle" name="cardStyle">
+            <option value="default">Style 1 — blue accent</option>
+            <option value="two">Style 2 — alternate accent</option>
+        </select>
+    </div>
+    <div class="form-group" style="display:flex;align-items:center;gap:8px;padding-top:28px;">
+        <input type="checkbox" id="isPublished" name="isPublished" checked>
+        <label for="isPublished" style="margin:0;">Published on website</label>
+    </div>
+</div>
+
+<div class="form-actions">
+    <button type="button" class="tf-button style-3" onclick="closeModal()">Cancel</button>
+    <button type="button" class="tf-button style-1" onclick="saveService()">Save Service</button>
+</div>
+</form>
+</div>
+</div>
+
+                    <div id="confirmModal" class="modal">
+                        <div class="modal-content" style="max-width:400px;">
+                            <div class="modal-header"><h3>Confirm Action</h3></div>
+                            <div class="modal-body"><p id="confirmMessage">Delete this service?</p></div>
+                            <div class="modal-footer">
+                                <button type="button" class="tf-button style-3" onclick="closeConfirmModal()">Cancel</button>
+                                <button type="button" id="confirmActionButton" class="tf-button style-3">Confirm</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+const summernoteToolbar = [
+    ['style', ['style']],
+    ['font', ['bold', 'italic', 'underline', 'strikethrough', 'clear']],
+    ['para', ['ul', 'ol', 'paragraph']],
+    ['insert', ['link']],
+    ['view', ['fullscreen', 'codeview', 'help']]
+];
+
+const summernoteOptions = {
+    height: 320,
+    toolbar: summernoteToolbar,
+    styleTags: ['p', 'blockquote', 'h1', 'h2', 'h3', 'h4'],
+    dialogsInBody: true,
+    callbacks: {
+        onInit: function () {
+            $('.note-editable').css({ 'font-family': 'Georgia, serif', 'font-size': '15px', 'line-height': '1.7' });
+        }
+    }
+};
+
+let editorsInitialized = false;
+
+function initRichEditors() {
+    if (editorsInitialized) return;
+    $('#sectionContent').summernote(summernoteOptions);
+    $('#additionalContent').summernote(
+        Object.assign({}, summernoteOptions, { height: 200 })
+    );
+    editorsInitialized = true;
+}
+
+function setEditorHtml(id, html) {
+    const $el = $('#' + id);
+    if (!editorsInitialized) initRichEditors();
+    $el.summernote('code', html || '');
+}
+
+function getEditorHtml(id) {
+    return $('#' + id).summernote('code');
+}
+
+const FEATURE_ICONS = [
+    { value: 'fa-solid fa-check', label: 'Check mark' },
+    { value: 'fa-solid fa-warehouse', label: 'Warehouse' },
+    { value: 'fa-solid fa-truck', label: 'Truck / transport' },
+    { value: 'fa-solid fa-ship', label: 'Ship' },
+    { value: 'fa-solid fa-shield-halved', label: 'Shield / security' },
+    { value: 'fa-solid fa-people-carry-box', label: 'Cargo handling' },
+    { value: 'fa-solid fa-boxes-stacked', label: 'Boxes / cargo' },
+    { value: 'fa-solid fa-tags', label: 'Pricing' },
+    { value: 'fa-solid fa-file-contract', label: 'Documents' },
+    { value: 'fa-solid fa-headset', label: 'Support' },
+    { value: 'fa-solid fa-clock', label: 'On-time' },
+    { value: 'fa-solid fa-globe', label: 'Global' }
+];
+
+function buildIconSelectOptions(selected) {
+    return FEATURE_ICONS.map(
+        (opt) => `<option value="${opt.value}" ${opt.value === selected ? 'selected' : ''}>${opt.label}</option>`
+    ).join('');
+}
+
+function addFeatureRow(data = {}) {
+    const list = document.getElementById('featuresList');
+    const row = document.createElement('div');
+    row.className = 'repeatable-item feature-item';
+    const icon = data.icon || 'fa-solid fa-check';
+    row.innerHTML = `
+        <button type="button" class="btn-remove-row" onclick="removeRepeatableRow(this)">Remove</button>
+        <div class="form-group" style="margin-bottom:10px;">
+            <label>Highlight title</label>
+            <input type="text" class="feature-title" placeholder="e.g. Secure Storage" value="${escapeAttr(data.title || '')}">
+        </div>
+        <div class="form-group" style="margin-bottom:10px;">
+            <label>Short description</label>
+            <input type="text" class="feature-description" placeholder="e.g. Safe, monitored facilities" value="${escapeAttr(data.description || '')}">
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+            <label>Icon</label>
+            <select class="feature-icon" onchange="updateFeatureIconPreview(this)">${buildIconSelectOptions(icon)}</select>
+            <div class="feature-icon-preview"><i class="${icon}"></i></div>
+        </div>
+    `;
+    list.appendChild(row);
+}
+
+function addBenefitRow(text = '') {
+    const list = document.getElementById('benefitsList');
+    const row = document.createElement('div');
+    row.className = 'benefit-item';
+    row.innerHTML = `
+        <input type="text" class="benefit-text" placeholder="e.g. Safe & secure storage space" value="${escapeAttr(text)}">
+        <button type="button" class="btn-remove-row" onclick="removeRepeatableRow(this)">Remove</button>
+    `;
+    list.appendChild(row);
+}
+
+function escapeAttr(str) {
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+
+function removeRepeatableRow(btn) {
+    btn.closest('.feature-item, .benefit-item')?.remove();
+}
+
+function updateFeatureIconPreview(selectEl) {
+    const preview = selectEl.parentElement.querySelector('.feature-icon-preview i');
+    if (preview) preview.className = selectEl.value;
+}
+
+function loadFeaturesList(features) {
+    document.getElementById('featuresList').innerHTML = '';
+    const list = features && features.length ? features : [];
+    if (list.length === 0) {
+        addFeatureRow();
+    } else {
+        list.forEach((f) => addFeatureRow(f));
+    }
+}
+
+function loadBenefitsList(benefits) {
+    document.getElementById('benefitsList').innerHTML = '';
+    const list = benefits && benefits.length ? benefits : [];
+    if (list.length === 0) {
+        addBenefitRow();
+    } else {
+        list.forEach((b) => addBenefitRow(b));
+    }
+}
+
+function collectFeatures() {
+    const items = [];
+    document.querySelectorAll('#featuresList .feature-item').forEach((row) => {
+        const title = row.querySelector('.feature-title')?.value.trim() || '';
+        const description = row.querySelector('.feature-description')?.value.trim() || '';
+        const icon = row.querySelector('.feature-icon')?.value || 'fa-solid fa-check';
+        if (title || description) {
+            items.push({ title, description, icon });
+        }
+    });
+    return items;
+}
+
+function collectBenefits() {
+    const items = [];
+    document.querySelectorAll('#benefitsList .benefit-text').forEach((input) => {
+        const text = input.value.trim();
+        if (text) items.push(text);
+    });
+    return items;
+}
+
+function insertTwoColumns(editorId) {
+    if (!editorsInitialized) initRichEditors();
+    const html = `
+<div class="service-two-columns">
+  <div class="service-column">
+    <h2>Left column heading</h2>
+    <p>Left column text...</p>
+  </div>
+  <div class="service-column">
+    <h2>Right column heading</h2>
+    <p>Right column text...</p>
+  </div>
+</div><p><br></p>`;
+    $('#' + editorId).summernote('pasteHTML', html);
+}
+
+function imagePreviewUrl(url) {
+    if (!url) return '';
+    if (url.startsWith('http')) return url;
+    if (url.startsWith('images/')) return '/' + url;
+    if (url.startsWith('/')) return url;
+    return '/uploads/' + url;
+}
+
+function setPreview(elId, url) {
+    document.getElementById(elId).innerHTML = url
+        ? `<img src="${imagePreviewUrl(url)}" style="max-width:160px;max-height:100px;margin-top:8px;border-radius:4px;">`
+        : '';
+}
+
+function openModal(service = null) {
+    const modal = document.getElementById('serviceModal');
+    const form = document.getElementById('serviceForm');
+    document.getElementById('modalTitle').textContent = service ? 'Edit Service' : 'Add New Service';
+
+    if (service) {
+        document.getElementById('serviceId').value = service._id;
+        document.getElementById('title').value = service.title || '';
+        document.getElementById('slug').value = service.slug || '';
+        document.getElementById('legacySlug').value = service.legacySlug || '';
+        document.getElementById('sortOrder').value = service.sortOrder || 0;
+        document.getElementById('shortDescription').value = service.shortDescription || '';
+        document.getElementById('metaTitle').value = service.metaTitle || '';
+        document.getElementById('metaDescription').value = service.metaDescription || '';
+        document.getElementById('metaKeywords').value = (service.metaKeywords || []).join(', ');
+        document.getElementById('heroTitle').value = service.heroTitle || '';
+        document.getElementById('heroDescription').value = service.heroDescription || '';
+        document.getElementById('sectionTitle').value = service.sectionTitle || '';
+        initRichEditors();
+        setEditorHtml('sectionContent', service.sectionContent || '');
+        setEditorHtml('additionalContent', service.additionalContent || '');
+        document.getElementById('calloutText').value = service.calloutText || '';
+        loadFeaturesList(service.features || []);
+        loadBenefitsList(service.benefits || []);
+        document.getElementById('cardStyle').value = service.cardStyle || 'default';
+        document.getElementById('isPublished').checked = service.isPublished !== false;
+        setPreview('heroPreview', service.heroImageUrl);
+        setPreview('cardPreview', service.cardImageUrl);
+        setPreview('iconPreview', service.iconImageUrl);
+    } else {
+        form.reset();
+        document.getElementById('serviceId').value = '';
+        document.getElementById('isPublished').checked = true;
+        ['heroPreview','cardPreview','iconPreview'].forEach(id => setPreview(id, ''));
+        loadFeaturesList([]);
+        loadBenefitsList([]);
+        initRichEditors();
+        setEditorHtml('sectionContent', '');
+        setEditorHtml('additionalContent', '');
+    }
+
+    modal.style.display = 'flex';
+}
+
+function closeModal() {
+    document.getElementById('serviceModal').style.display = 'none';
+}
+
+async function saveService() {
+    if (!editorsInitialized) initRichEditors();
+
+    const sectionHtml = getEditorHtml('sectionContent').trim();
+    if (!sectionHtml || sectionHtml === '<p><br></p>') {
+        alert('Please add main page content in the editor.');
+        return;
+    }
+
+    const form = document.getElementById('serviceForm');
+    const formData = new FormData(form);
+    formData.set('sectionContent', sectionHtml);
+    formData.set('additionalContent', getEditorHtml('additionalContent'));
+    formData.set('features', JSON.stringify(collectFeatures()));
+    formData.set('benefits', collectBenefits().join('\n'));
+
+    const serviceId = document.getElementById('serviceId').value;
+    formData.set('isPublished', document.getElementById('isPublished').checked);
+
+    const url = serviceId ? `/api/service/${serviceId}` : '/api/service';
+    const method = serviceId ? 'PUT' : 'POST';
+
+    try {
+        const response = await fetch(url, { method, body: formData });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.message || 'Failed to save service');
+        alert(serviceId ? 'Service updated!' : 'Service created!');
+        window.location.reload();
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
+async function editService(id) {
+    try {
+        const response = await fetch(`/api/service/${id}`);
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message || 'Failed to load service');
+        openModal(data);
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
+function confirmDeleteService(id) {
+    document.getElementById('confirmModal').style.display = 'flex';
+    document.getElementById('confirmMessage').textContent = 'Delete this service? This cannot be undone.';
+    document.getElementById('confirmActionButton').onclick = () => deleteService(id);
+}
+
+async function deleteService(id) {
+    try {
+        const response = await fetch(`/api/service/${id}`, { method: 'DELETE' });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.message || 'Failed to delete');
+        document.getElementById(`service-${id}`)?.remove();
+        closeConfirmModal();
+        alert('Service deleted');
+        if (document.querySelectorAll('.st-data-card').length === 0) {
+            document.querySelector('.st-data-grid').innerHTML =
+                '<div class="no-results"><p>No services found</p></div>';
+        }
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
+function closeConfirmModal() {
+    document.getElementById('confirmModal').style.display = 'none';
+}
+
+window.onclick = function(event) {
+    if (event.target === document.getElementById('serviceModal')) closeModal();
+    if (event.target === document.getElementById('confirmModal')) closeConfirmModal();
+};
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/admin-js/jquery.min.js"></script>
+    <script src="/admin-js/bootstrap.min.js"></script>
+    <script src="/admin-js/bootstrap-select.min.js"></script>
+    <script src="/admin-js/zoom.js"></script>
+    <script src="/admin-js/switcher.js"></script>
+    <script defer src="/admin-js/theme-settings.js"></script>
+    <script defer src="/admin-js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
+</body>
+</html>
