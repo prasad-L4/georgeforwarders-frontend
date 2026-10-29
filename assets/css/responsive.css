@@ -4098,3 +4098,16 @@
 
 
 }
+@media only screen and (max-width: 991.98px) {
+	.main-header.scrolled .header-lower .mobile-nav-toggler {
+		display: none;
+	}
+
+	.sticky-header .mobile-nav-toggler {
+		position: absolute;
+		top: 50%;
+		right: 15px;
+		margin-left: 0;
+		transform: translateY(-50%);
+	}
+}

@@ -18897,4 +18897,8 @@ Section Title
   .sticky-header .main-menu {
     display: none;
   }
+  .sticky-header .outer-box .menubars{
+    display:none!important;
+  }
+
 }
